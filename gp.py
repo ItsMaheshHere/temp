@@ -7,6 +7,7 @@ import subprocess
 import asyncio
 import pyperclip 
 import cv2
+import requests
 
 PNG_PATH='./images/'
 running1=False
@@ -367,6 +368,25 @@ def for_end():
     pyautogui.click(250,20)
     time.sleep(0.6)
 
+def get_lati_longi():
+    response=requests.get('https://ipinfo.io/json')
+    if response.status_code==200:
+        data=response.json()
+        location=data['loc'].split(',')
+        return location[0], location[1]
+    return None, None
+
+def change_corrdinates():
+    pyautogui.click(1265,60)
+    lati,longi=get_lati_longi()
+    coordinates=f"{lati},{longi}"
+    pyperclip.copy(coordinates)
+    pyautogui.click(1050,490)
+    time.sleep(0.3)
+    pyautogui.hotkey('ctrl','v')
+    time.sleep(0.3)
+    pyautogui.click(1015,550)
+
 def open_firefox_n_navigate_to_sort_link():
     pyautogui.click(797, 752)
     time.sleep(0.2)
@@ -374,26 +394,14 @@ def open_firefox_n_navigate_to_sort_link():
     time.sleep(0.4)
     user_agent_change()
     time.sleep(0.4)
+    change_corrdinates()
+    time.sleep(0.4)
     pyautogui.hotkey('ctrl', 'l')
     yt_url="https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqblB3X0tIclZyaElXa2tpbkM0TjF2ejNFUUQtZ3xBQ3Jtc0trUzZLSWU0TUFiSGZtNm9SeWVMWnhJTXhra2k1cnhDVHBMMFZxbEFoY3FRcURrdXUxWm44QndLd1o1TU54TzJmVW13MTd0bXVfQjFLb1JrZnBuOWdiaWFQalBxWmlBMV9abk50ZEdmTnZRRTdkTmItNA&q=https%3A%2F%2Fgplinks.co%2Fj80N&v=zI91oaUZbFE"
     pyperclip.copy(yt_url)
     pyautogui.hotkey('ctrl', 'v')
     time.sleep(0.3)
     pyautogui.press('enter')
-
-    for i in range(40):
-        try:
-            go_to_site=pyautogui.locateOnScreen(PNG_PATH + 'go_to_site_pc.png',confidence=0.7)
-            if go_to_site:
-                x,y=pyautogui.center(go_to_site)
-                pyautogui.click(x,y)
-                break
-        except Exception as e:
-            print(f"go to site img not found{e}")
-        time.sleep(1)
-    else:
-        return False
-    
     return True
 
 
@@ -459,55 +467,12 @@ def nav_to_mobile_ua_change():
     time.sleep(0.5)
 
 def random_scroll():
-    ch=random.randint(1,4)
+    ch=random.randint(1,2)
     if ch==1:
         x=random.randint(175,625)
         y=random.randint(700,900)
         x2=x+random.randint(-70,120)
         y2=random.randint(270,550)
-        duration=random.randint(210,280)
-        mobile_scroll(x,y,x2,y2,duration)
-    elif ch==2:
-        x=random.randint(175,625)
-        y=random.randint(700,900)
-        x2=x+random.randint(-70,120)
-        y2=random.randint(270,550)
-        duration=random.randint(210,280)
-        mobile_scroll(x,y,x2,y2,duration)
-        time.sleep(random.uniform(0.1,0.5))
-        x=random.randint(175,625)
-        y=random.randint(270,550)
-        x2=x+random.randint(-70,120)
-        y2=random.randint(700,900)
-        duration=random.randint(210,280)
-        mobile_scroll(x,y,x2,y2,duration)
-    elif ch==3:
-        x=random.randint(175,625)
-        y=random.randint(700,900)
-        x2=x+random.randint(-70,120)
-        y2=random.randint(270,550)
-        duration=random.randint(210,280)
-        mobile_scroll(x,y,x2,y2,duration)
-        time.sleep(random.uniform(0.1,0.5))
-        x=random.randint(175,625)
-        y=random.randint(270,550)
-        x2=x+random.randint(-70,120)
-        y2=random.randint(700,900)
-        duration=random.randint(210,280)
-        mobile_scroll(x,y,x2,y2,duration)
-
-        #fhfyudtdtdttdtdtdtdtdtdtdtdtdtdt
-        x=random.randint(175,625)
-        y=random.randint(700,900)
-        x2=x+random.randint(-70,120)
-        y2=random.randint(270,550)
-        duration=random.randint(210,280)
-        mobile_scroll(x,y,x2,y2,duration)
-        time.sleep(random.uniform(0.1,0.5))
-        x=random.randint(175,625)
-        y=random.randint(270,550)
-        x2=x+random.randint(-70,120)
-        y2=random.randint(700,900)
         duration=random.randint(210,280)
         mobile_scroll(x,y,x2,y2,duration)
     else:
@@ -517,12 +482,11 @@ def random_scroll():
         y2=random.randint(270,550)
         duration=random.randint(210,280)
         mobile_scroll(x,y,x2,y2,duration)
-
-        #ghghghghghghghhghghghghghghhghghgh
+        time.sleep(random.uniform(0.1,0.5))
         x=random.randint(175,625)
-        y=random.randint(700,900)
+        y=random.randint(270,550)
         x2=x+random.randint(-70,120)
-        y2=random.randint(270,550)
+        y2=random.randint(700,900)
         duration=random.randint(210,280)
         mobile_scroll(x,y,x2,y2,duration)
 
@@ -577,20 +541,112 @@ def mobile_closing_link_handle():
 def mobile_reach_to_first_link():
     time.sleep(random.randint(15,30))
     for i in range(30):
-        try:
-            result = find_image_on_mobile(PNG_PATH+"go_to_site_mobile.png", confidence=0.8)
-            if result and result['found']:
-                x,y=result['center']
-                touch_on_mobile(x,y)
-                break
-            else:
-                print("go_to_site img not found")
-        except:
-            pass
+        result = find_image_on_mobile(PNG_PATH+"go_to_site_mobile.png", confidence=0.8)
+        if result and result['found']:
+            x,y=result['center']
+            touch_on_mobile(x,y)
+            break
+        else:
+            print("go_to_site img not found")
         time.sleep(1)
     else:
         return False
     
+    for i in range(40):
+        loanBuzz=find_image_on_mobile(PNG_PATH+"gplinks_co_mobile.png",confidence=0.8)
+        if loanBuzz['found']:
+            break
+        time.sleep(1)
+    else:
+        return False
+    
+    random_scroll()
+    
+    time.sleep(random.randint(1,4))
+    ch=random.randint(1,2)
+    if ch==1:
+        x=random.randint(175,625)
+        y=random.randint(700,900)
+        x2=x+random.randint(-70,120)
+        y2=random.randint(270,550)
+        duration=random.randint(210,280)
+        mobile_scroll(x2,y2,x,y,duration)
+    else:
+        pass
+
+    for i in range(30):
+        result=find_image_on_mobile(PNG_PATH+"verify_human_mobile.png",confidence=0.8)
+        if result['found']:
+            x,y=result['random']
+            touch_on_mobile(x,y)
+
+        result2=find_image_on_mobile(PNG_PATH+"ver_success_mobile.png",confidence=0.8)
+        if result2['found']:
+            break
+        time.sleep(1)
+    else:
+        return False
+    
+    return True
+
+def mobile_second_link_handle():
+    for i in range(20):
+        result=find_image_on_mobile(PNG_PATH+"cancel_img_mobile.png",confidence=0.8)
+        if result['found']:
+            x,y=result['center']
+            touch_on_mobile(x,y)
+            break
+        time.sleep(1)
+    
+    time.sleep(random.randint(2,6))
+    random_scroll()
+    
+    time.sleep(random.randint(4,7))
+    ch=random.randint(1,2)
+    if ch==1:
+        random_scroll()
+
+    time.sleep(random.randint(4,7))
+    ch=random.randint(1,2)
+    if ch==1:
+        random_scroll()
+
+    time.sleep(random.randint(4,7))
+    ch=random.randint(1,2)
+    if ch==1:
+        random_scroll()
+
+    time.sleep(random.randint(4,7))
+    ch=random.randint(1,2)
+    if ch==1:
+        random_scroll()
+
+    for i in range(20):
+        result=find_image_on_mobile(PNG_PATH+'verify_img_mobile',confidence=0.8)
+        if result['found']:
+            x,y=result['random']
+            touch_on_mobile(x,y)
+        time.sleep(1)
+    else:
+        return False
+    
+    x=random.randint(175,625)
+    y=random.randint(700,900)
+    x2=x+random.randint(-70,120)
+    y2=random.randint(270,550)
+    duration=random.randint(35,40)
+    mobile_scroll(x,y,x2,y2,duration)
+    time.slep(random.randint(1,2))
+    x=random.randint(175,625)
+    y=random.randint(700,900)
+    x2=x+random.randint(-70,120)
+    y2=random.randint(270,550)
+    duration=random.randint(35,40)
+    mobile_scroll(x,y,x2,y2,duration)
+
+    attempt=0
+    for i in range(20):
+        pass
 
 
 def main1():
@@ -669,5 +725,4 @@ def main2():
     else:
         mobile_closing_link_handle()
         return
-    
     
