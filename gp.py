@@ -345,17 +345,9 @@ def clear_cookies():
     time.sleep(1)
     pyautogui.click(150,320)
     time.sleep(0.6)
-    pyautogui.moveTo(600,300,duration=0.2)
-    time.sleep(0.3)
-    pyautogui.scroll(-500)
-    time.sleep(0.6)
-    try:
-        result=pyautogui.locateOnScreen(PNG_PATH+'clear_cookies_img_pc.png',confidence=0.8)
-        if result:
-            x,y=pyautogui.center(result)
-            pyautogui.click(x,y)
-    except:
-        pass
+    pyautogui.click(1358,268)
+    time.sleep(1)
+    pyautogui.click(370,462)
     time.sleep(0.8)
     pyautogui.click(800,640)
     time.sleep(0.5)
@@ -616,13 +608,8 @@ def mobile_reach_to_first_link():
     return True
 
 def mobile_second_link_handle():
-    for i in range(20):
-        result=find_image_on_mobile(PNG_PATH+"cancel_img_mobile.png",confidence=0.8)
-        if result['found']:
-            x,y=result['center']
-            touch_on_mobile(x,y)
-            break
-        time.sleep(1)
+    time.sleep(7)
+    touch_on_mobile(400,1000)
     
     time.sleep(random.randint(2,6))
     random_scroll()
@@ -674,13 +661,30 @@ def mobile_second_link_handle():
     else:
         return False
     
+    try:
+        close=find_image_on_mobile(PNG_PATH+'close_img_mobile.png',confidence=0.6)
+        if close['found']:
+            x,y=close['center']
+            touch_on_mobile(x,y)
+    except:
+        pass
+
+    close_ad_tab_mobile()
+    try:
+        close=find_image_on_mobile(PNG_PATH+'close_img_mobile.png',confidence=0.6)
+        if close['found']:
+            x,y=close['center']
+            touch_on_mobile(x,y)
+    except:
+        pass
+    
     x=random.randint(175,625)
     y=random.randint(700,900)
     x2=x+random.randint(-70,120)
     y2=random.randint(270,550)
     duration=random.randint(35,40)
     mobile_scroll(x,y,x2,y2,duration)
-    time.slep(random.randint(1,2))
+    time.sleep(random.randint(1,2))
     x=random.randint(175,625)
     y=random.randint(700,900)
     x2=x+random.randint(-70,120)
