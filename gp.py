@@ -213,7 +213,7 @@ def middle_link_pc_handle():
                 time.sleep(random.randint(1,3))
                 random_coordinates_from_found_img(verify_image)
                 time.sleep(4)
-                pyautogui.scroll(475,20)
+                pyautogui.click(475,20)
                 verify_found=True
         except:
             if verify_found:
@@ -243,11 +243,10 @@ def middle_link_pc_handle():
         try:
             continue_img=pyautogui.locateOnScreen(PNG_PATH+'continue_img_pc.png',confidence=0.8)
             if continue_img:
-                continue_found=True
-                time.sleep(random.randint(1,3))
                 random_coordinates_from_found_img(continue_img)
                 time.sleep(2)
-                pyautogui.scroll(475,20)
+                continue_found=True
+                pyautogui.click(475,20)
         except:
             if continue_found:
                 consecutive_failures+=1
@@ -322,6 +321,7 @@ def last_link_pc():
             get_link=pyautogui.locateOnScreen(PNG_PATH+'get_link_pc.png',confidence=0.8)
             if get_link:
                 random_coordinates_from_found_img(get_link)
+                break
         except Exception as e:
             print(e)
         time.sleep(1)
@@ -369,6 +369,7 @@ def for_end():
     time.sleep(0.6)
 
 def get_lati_longi():
+    time.sleep(2)
     response=requests.get('https://ipinfo.io/json')
     if response.status_code==200:
         data=response.json()
@@ -382,6 +383,8 @@ def change_corrdinates():
     coordinates=f"{lati},{longi}"
     pyperclip.copy(coordinates)
     pyautogui.click(1050,490)
+    time.sleep(0.3)
+    pyautogui.hotkey('ctrl','a')
     time.sleep(0.3)
     pyautogui.hotkey('ctrl','v')
     time.sleep(0.3)
@@ -402,6 +405,20 @@ def open_firefox_n_navigate_to_sort_link():
     pyautogui.hotkey('ctrl', 'v')
     time.sleep(0.3)
     pyautogui.press('enter')
+
+    for i in range(40):
+        try:
+            go_to_site=pyautogui.locateOnScreen(PNG_PATH+'go_to_site_pc.png',confidence=0.7)
+            if go_to_site:
+                x,y=pyautogui.center(go_to_site)
+                pyautogui.click(x,y)
+                break
+        except Exception as e:
+            print(f"go to site img not found{e}")
+        time.sleep(1)
+    else:
+        return False
+    
     return True
 
 
@@ -537,6 +554,15 @@ def mobile_closing_link_handle():
     touch_on_mobile(61, 93)
     time.sleep(0.8)
 
+def close_ad_tab_mobile():
+    time.sleep(0.4)
+    touch_on_mobile(580,120)
+    time.sleep(0.8)
+    touch_on_mobile(669, 1104)
+    time.sleep(0.6)
+    touch_on_mobile(84, 926)
+    time.sleep(0.4)
+
 
 def mobile_reach_to_first_link():
     time.sleep(random.randint(15,30))
@@ -620,12 +646,30 @@ def mobile_second_link_handle():
     ch=random.randint(1,2)
     if ch==1:
         random_scroll()
-
+    
+    attempt=0
     for i in range(20):
-        result=find_image_on_mobile(PNG_PATH+'verify_img_mobile',confidence=0.8)
+        attempt+=1
+        result=find_image_on_mobile(PNG_PATH+'verify_img_mobile.png',confidence=0.8)
         if result['found']:
             x,y=result['random']
             touch_on_mobile(x,y)
+            break
+        else:
+            if attempt>4 and attempt<10:
+                x=random.randint(175,625)
+                y=random.randint(700,900)
+                x2=x+random.randint(-70,120)
+                y2=random.randint(270,550)
+                duration=random.randint(400,500)
+                mobile_scroll(x2,y2,x,y,duration)
+            if attempt>11:
+                x=random.randint(175,625)
+                y=random.randint(700,900)
+                x2=x+random.randint(-70,120)
+                y2=random.randint(270,550)
+                duration=random.randint(400,500)
+                mobile_scroll(x,y,x2,y2,duration)
         time.sleep(1)
     else:
         return False
@@ -646,9 +690,104 @@ def mobile_second_link_handle():
 
     attempt=0
     for i in range(20):
-        pass
+        attempt+=1
+        result=find_image_on_mobile(PNG_PATH+'continue_img_mobile.png')
+        if result['found']:
+            x,y=result['random']
+            touch_on_mobile(x,y)
+            break
+        else:
+            if attempt>5 and attempt<10:
+                x=random.randint(175,625)
+                y=random.randint(700,900)
+                x2=x+random.randint(-70,120)
+                y2=random.randint(270,550)
+                duration=random.randint(400,500)
+                mobile_scroll(x,y,x2,y2,duration)
+            if attempt>11:
+                x=random.randint(175,625)
+                y=random.randint(700,900)
+                x2=x+random.randint(-70,120)
+                y2=random.randint(270,550)
+                duration=random.randint(400,500)
+                mobile_scroll(x2,y2,x,y,duration)
+        time.sleep(1)
+    else:
+        return False
+    
+    return True
 
+def mobile_last_link_handle():
+    for i in range(20):
+        gp_logo=find_image_on_mobile(PNG_PATH+'gp_logo_mobile.png',confidence=0.8)
+        if gp_logo['found']:
+            break
+        time.sleep(1)
+    else:
+        return False
+    
+    time.sleep(random.randint(1,3))
+    random_scroll()
 
+    ch=random.randint(1,2)
+    if ch==1:
+        random_scroll()
+    
+    time.sleep(random.randint(1,3))
+    ch=random.randint(1,2)
+    if ch==1:
+        random_scroll()
+
+    for i in range(20):
+        result=find_image_on_mobile(PNG_PATH+'verified_human_mobile.png',confidence=0.8)
+        if result['found']:
+            break
+
+        result2=find_image_on_mobile(PNG_PATH+'verify_human_mobile.png',confidence=0.8)
+        if result2['found']:
+            x,y=result2['random']
+            touch_on_mobile(x,y)
+        
+        time.sleep(1)
+    else:
+        return False
+    
+    x=random.randint(175,625)
+    y=random.randint(700,900)
+    x2=x+random.randint(-70,120)
+    y2=random.randint(270,550)
+    duration=random.randint(200,250)
+    mobile_scroll(x,y,x2,y2,duration)
+    attempt=0
+    for i in range(20):
+        attempt+=1
+        get_link=find_image_on_mobile(PNG_PATH+'get_link_mobile.png',confidence=0.8)
+        if get_link['found']:
+            x,y=get_link['random']
+            touch_on_mobile(x,y)
+            break
+        else:
+            if attempt>5 and attempt<10:
+                x=random.randint(175,625)
+                y=random.randint(700,900)
+                x2=x+random.randint(-70,120)
+                y2=random.randint(270,550)
+                duration=random.randint(400,500)
+                mobile_scroll(x,y,x2,y2,duration)
+            if attempt>11:
+                x=random.randint(175,625)
+                y=random.randint(700,900)
+                x2=x+random.randint(-70,120)
+                y2=random.randint(270,550)
+                duration=random.randint(400,500)
+                mobile_scroll(x2,y2,x,y,duration)
+        time.sleep(1)
+    else:
+        return False
+    
+    time.sleep(2)
+    
+    return True
 def main1():
     global running1,running2
     while not running2:
@@ -712,9 +851,10 @@ def main2():
     time.sleep(0.3)
     running2=True
     nav_to_mobile_ua_change()
+    mobile_opening_link_handle()
     if mobile_reach_to_first_link():
-        if mobile_handle_second_link():
-            if handle_last_link():
+        if mobile_second_link_handle():
+            if mobile_last_link_handle():
                 mobile_closing_link_handle()
             else:
                 mobile_closing_link_handle()
@@ -726,3 +866,13 @@ def main2():
         mobile_closing_link_handle()
         return
     
+async def main():
+    await asyncio.gather(
+        asyncio.to_thread(main1),
+        asyncio.to_thread(main2)
+    )
+
+while True:
+    asyncio.run(main())
+    time.sleep(0.2)
+    running2=False
