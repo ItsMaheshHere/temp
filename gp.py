@@ -220,7 +220,7 @@ def middle_link_pc_handle():
                 consecutive_failures+=1
             if consecutive_failures>=1:
                 break
-            if attempt>=13:
+            if attempt>=3:
                 x=random.uniform(290,1100)
                 y=random.uniform(200,600)
                 pyautogui.moveTo(x,y)
@@ -605,11 +605,12 @@ def mobile_reach_to_first_link():
     else:
         return False
     
+    time.sleep(7)
+    touch_on_mobile(400,1000)
+    
     return True
 
 def mobile_second_link_handle():
-    time.sleep(7)
-    touch_on_mobile(400,1000)
     
     time.sleep(random.randint(2,6))
     random_scroll()
@@ -669,7 +670,9 @@ def mobile_second_link_handle():
     except:
         pass
 
+    time.sleep(0.5)
     close_ad_tab_mobile()
+    time.sleep(0.3)
     try:
         close=find_image_on_mobile(PNG_PATH+'close_img_mobile.png',confidence=0.6)
         if close['found']:
@@ -678,6 +681,7 @@ def mobile_second_link_handle():
     except:
         pass
     
+    time.sleep(0.5)
     x=random.randint(175,625)
     y=random.randint(700,900)
     x2=x+random.randint(-70,120)
@@ -689,7 +693,7 @@ def mobile_second_link_handle():
     y=random.randint(700,900)
     x2=x+random.randint(-70,120)
     y2=random.randint(270,550)
-    duration=random.randint(35,40)
+    duration=random.randint(30,35)
     mobile_scroll(x,y,x2,y2,duration)
 
     attempt=0
